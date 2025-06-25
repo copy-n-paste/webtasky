@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Sign Up</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Define a base font size for easier scaling with rem units */
+            font-size: 16px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e0f2f7 0%, #d4e7f0 50%, #c8dae6 100%);
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Use min-height for better mobile behavior */
+            margin: 0;
+            overflow: hidden; /* Prevent scrollbar during animation */
+            padding: 1rem; /* Add some padding for very small screens */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+        .container {
+            background: #fff;
+            padding: 2.5rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            width: 100%; /* Make width responsive */
+            max-width: 400px; /* Set a max-width for larger screens */
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+        .container h2 {
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: #222;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            font-size: 1.8rem; /* Use rem for scalability */
+        }
+        .container h2.hide-title {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        .container h2.show-title {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .auth-btn {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 1rem; /* Use rem for gap */
+            width: 100%;
+            padding: 0.85rem 1.5rem; /* Combine padding */
+            margin-bottom: 1.25rem;
+            border: none;
+            border-radius: 16px;
+            font-size: 1rem; /* Use rem for font size */
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.1s cubic-bezier(.4,0,.2,1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            user-select: none;
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+        .auth-btn:active {
+            transform: scale(0.96);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+        }
+        .auth-btn.google:hover {
+            background: #f1f1f1;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+        }
+        .auth-btn:focus-visible {
+            outline: 2px solid #007bff;
+            outline-offset: 2px;
+        }
+
+        .auth-btn.google {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            color: #222;
+        }
+        .switch {
+            margin-top: 1.5rem;
+            color: #666;
+            font-size: 0.9rem; /* Slightly smaller for switch text */
+            transition: opacity 0.4s ease;
+        }
+        .switch a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .switch a:hover {
+            text-decoration: underline;
+        }
+        .icon {
+            width: 1.75rem; /* Use rem for icon size */
+            height: 1.75rem;
+            flex-shrink: 0; /* Prevent icon from shrinking on smaller screens */
+        }
+
+        /* Animation classes for the content inside the container */
+        .content-wrapper {
+            position: relative;
+            transition: transform 0.4s cubic-bezier(.4,0,.2,1), opacity 0.4s cubic-bezier(.4,0,.2,1);
+        }
+        .content-wrapper.slide-out-left {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+        .content-wrapper.slide-out-right {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        .content-wrapper.slide-in-left {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+        .content-wrapper.slide-in-right {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        .content-wrapper.show-content {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        /* --- Media Queries for Responsiveness --- */
+
+        /* Adjustments for screens smaller than 768px (e.g., tablets in portrait) */
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1.5rem; /* Slightly less padding on smaller tablets */
+            }
+            .container h2 {
+                font-size: 1.6rem;
+            }
+            .auth-btn {
+                font-size: 0.95rem;
+                padding: 0.75rem 1.25rem;
+            }
+            .icon {
+                width: 1.6rem;
+                height: 1.6rem;
+            }
+        }
+
+        /* Adjustments for screens smaller than 480px (e.g., mobile phones) */
+        @media (max-width: 480px) {
+            :root {
+                font-size: 15px; /* Slightly reduce base font size for very small screens */
+            }
+            body {
+                padding: 0.75rem; /* Reduce overall body padding */
+            }
+            .container {
+                padding: 1.75rem 1rem; /* More compact padding for mobile */
+                border-radius: 12px; /* Slightly smaller border-radius */
+            }
+            .container h2 {
+                font-size: 1.5rem; /* Further adjust title size */
+                margin-bottom: 1rem;
+            }
+            .auth-btn {
+                font-size: 0.9rem; /* Smaller button text */
+                padding: 0.7rem 1rem; /* More compact button padding */
+                gap: 0.75rem; /* Smaller gap */
+            }
+            .auth-btn img.icon { /* Target the image icon specifically for better control */
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+            .auth-btn span.icon svg { /* This was for GitHub, but keeping for reference if future SVGs are added */
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+            .switch {
+                font-size: 0.85rem;
+                margin-top: 1rem;
+            }
+        }
+
+        /* Further adjustments for extremely small screens (e.g., old/very small phones) */
+        @media (max-width: 320px) {
+            :root {
+                font-size: 14px;
+            }
+            .container {
+                padding: 1.5rem 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="content-wrapper" id="content-wrapper">
+            <h2 id="form-title" class="show-title">Login</h2>
+            <button class="auth-btn google">
+                <img class="icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google">
+                Continue with Google
+            </button>
+            <div class="switch">
+                Don't have an account? <a href="#" id="switch-link">Sign up</a>
+            </div>
+        </div>
+    </div>
+    <script>
+        const formTitle = document.getElementById('form-title');
+        const switchDiv = document.querySelector('.switch');
+        const contentWrapper = document.getElementById('content-wrapper');
+        const googleBtn = document.querySelector('.auth-btn.google'); // Get a reference to the Google button
+        let isLogin = true;
+
+        function updateButtonLabels() {
+            if (isLogin) {
+                googleBtn.innerHTML = '<img class="icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google"> Continue with Google';
+            } else {
+                googleBtn.innerHTML = '<img class="icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google"> Sign up with Google';
+            }
+        }
+
+        switchDiv.addEventListener('click', function(e) {
+            if (e.target && e.target.id === 'switch-link') {
+                e.preventDefault();
+                const prevIsLogin = isLogin;
+                isLogin = !isLogin;
+
+                const exitClass = prevIsLogin ? 'slide-out-left' : 'slide-out-right';
+                const enterClass = isLogin ? 'slide-in-right' : 'slide-in-left';
+
+                contentWrapper.classList.remove('show-content');
+                contentWrapper.classList.add(exitClass);
+
+                formTitle.classList.remove('show-title');
+                formTitle.classList.add('hide-title');
+
+                setTimeout(() => {
+                    switchDiv.innerHTML = isLogin ?
+                        "Don't have an account? <a href=\"#\" id=\"switch-link\">Sign up</a>" :
+                        "Already have an account? <a href=\"#\" id=\"switch-link\">Login</a>";
+                    updateButtonLabels();
+
+                    contentWrapper.classList.remove(exitClass);
+                    contentWrapper.classList.add(enterClass);
+
+                    void contentWrapper.offsetWidth;
+
+                    contentWrapper.classList.remove(enterClass);
+                    contentWrapper.classList.add('show-content');
+
+                    setTimeout(() => {
+                        formTitle.textContent = isLogin ? 'Login' : 'Sign Up';
+                        formTitle.classList.remove('hide-title');
+                        formTitle.classList.add('show-title');
+                    }, 150);
+
+                }, 400);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            contentWrapper.classList.add('show-content');
+            formTitle.classList.add('show-title');
+            updateButtonLabels();
+        });
+    </script>
+    
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+      import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+      import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+      // Your Firebase config
+      const firebaseConfig = {
+        apiKey: "AIzaSyC4EIppx9yq01FtdF_w3wmwXdjvU-88cyM",
+        authDomain: "mytaskwebapp.firebaseapp.com",
+        projectId: "mytaskwebapp",
+        storageBucket: "mytaskwebapp.firebasestorage.app",
+        messagingSenderId: "229046753081",
+        appId: "1:229046753081:web:828bdff56710ff7407fae8",
+        measurementId: "G-T8XTSSYQ9W"
+      };
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore();
+      window.firebaseAuth = auth; // Make auth available globally
+
+      const provider = new GoogleAuthProvider();
+      googleBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        try {
+          const result = await signInWithPopup(auth, provider);
+          const user = result.user;
+          // Store/update user info in Firestore
+          await setDoc(doc(db, 'users', user.uid), {
+            displayName: user.displayName || '',
+            email: user.email || '',
+            photoURL: user.photoURL || '',
+            uid: user.uid
+          }, { merge: true });
+          const isNewUser = result._tokenResponse && result._tokenResponse.isNewUser;
+          if (isNewUser) {
+            alert('Sign up successful! Welcome, ' + (user.displayName || user.email));
+          }
+          // Redirect to set-task.html after login/signup
+          window.location.href = 'set-task.html';
+        } catch (error) {
+          alert('Authentication failed: ' + (error.message || error));
+        }
+      });
+    </script>
+</body>
+</html>
