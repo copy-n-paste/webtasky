@@ -69,7 +69,7 @@ Now you can enjoy it too — along with **all my errors**. 🧨
 ## 🐍 Wanna Stay in Terminal?
 
 Check out my parallel Python-based CLI version (no frontend tears involved):
-👉 [MyTaskManager-Python](https://github.com/your-username/mytaskmanager-python)
+👉 [MyTaskManager-Python](https://github.com/copy-n-paste/pytasky.git)
 
 ---
 
