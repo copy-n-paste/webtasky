@@ -142,19 +142,23 @@
                 document.getElementById('user-name').textContent = user.displayName || 'No Name';
                 document.getElementById('user-email').textContent = user.email || '';
                 document.getElementById('profile-img').src = user.photoURL || 'https://via.placeholder.com/90';
-                // Fetch tasks
+                // Debug: Log user UID and Firestore path
+                console.log('Current user UID:', user.uid);
                 const tasksCol = collection(db, 'users', user.uid, 'tasks');
+                console.log('Querying Firestore path: users/' + user.uid + '/tasks');
                 const q = query(tasksCol, orderBy('date'), orderBy('time'));
                 const snapshot = await getDocs(q);
+                console.log('Raw snapshot size:', snapshot.size);
                 const tasks = [];
                 snapshot.forEach(doc => {
                     tasks.push({ id: doc.id, ...doc.data() });
                 });
+                console.log('Fetched tasks:', tasks.length, tasks);
                 const pending = tasks.filter(t => t.status === 'pending');
                 const completed = tasks.filter(t => t.status === 'completed');
                 // Render tables
                 const renderTable = (arr, title, isPending) => {
-                    if (arr.length === 0) return `<div>No ${title.toLowerCase()} tasks.</div>`;
+                    if (arr.length === 0) return `<div style='color:red;'>No ${title.toLowerCase()} tasks found for this user.</div>`;
                     return `<div class="tasks-section-title">${title}</div><table class="tasks-table"><thead><tr><th>Task Name</th><th>Description</th><th>Date</th><th>Time</th><th>Status</th><th>Action</th></tr></thead><tbody>` +
                         arr.map(t => `<tr class="${t.status}"><td>${t.name}</td><td>${t.description}</td><td>${t.date}</td><td>${t.time}</td><td>${t.status.charAt(0).toUpperCase() + t.status.slice(1)}</td><td>` +
                             (isPending ? `<button class='mark-completed-btn' data-id='${t.id}'>Mark as Completed</button> ` : '') +
@@ -204,6 +208,42 @@
                         window.location.reload();
                     });
                 });
+                // Function to check for due tasks and notify
+                async function checkDueTasksAndNotify() {
+                    const now = new Date();
+                    const pad = n => n.toString().padStart(2, '0');
+                    const today = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+                    const currentTime = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+                    // Fetch latest tasks
+                    const tasksCol = collection(db, 'users', user.uid, 'tasks');
+                    const q = query(tasksCol, orderBy('date'), orderBy('time'));
+                    const snapshot = await getDocs(q);
+                    const tasks = [];
+                    snapshot.forEach(docSnap => {
+                        tasks.push({ id: docSnap.id, ...docSnap.data() });
+                    });
+                    // Find pending tasks due now
+                    for (const t of tasks) {
+                        if (t.status === 'pending' && t.date === today && t.time === currentTime) {
+                            // Show notification
+                            if (Notification.permission === 'granted') {
+                                new Notification('Task Reminder', { body: `It's time for your task: '${t.name}'` });
+                            } else {
+                                alert(`It's time for your task: '${t.name}'`);
+                            }
+                            // Mark as completed in Firestore
+                            await updateDoc(doc(db, 'users', user.uid, 'tasks', t.id), { status: 'completed' });
+                        }
+                    }
+                }
+                // Ask for notification permission if not already granted
+                if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+                    Notification.requestPermission();
+                }
+                // Check every minute
+                setInterval(checkDueTasksAndNotify, 1000);
+                // Also check immediately on load
+                checkDueTasksAndNotify();
             } else {
                 // User is signed out, redirect to login
                 window.location.href = 'login-signup.html';
