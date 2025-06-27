@@ -1,7 +1,7 @@
 importScripts('https://www.gstatic.com/firebasejs/11.9.1/firebase-app-compat.js');
 importScripts('https://www.gstatic.com/firebasejs/11.9.1/firebase-messaging-compat.js');
 
-//ADD YOUR's
+// Your Firebase configuration
 firebase.initializeApp({
   apiKey: "",
   authDomain: "",
