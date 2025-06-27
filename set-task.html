@@ -124,14 +124,14 @@
       import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
       import { getFirestore, collection, addDoc, serverTimestamp, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
       import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-messaging.js";
-      const firebaseConfig = {
-        apiKey: "AIzaSyC4EIppx9yq01FtdF_w3wmwXdjvU-88cyM",
-        authDomain: "mytaskwebapp.firebaseapp.com",
-        projectId: "mytaskwebapp",
-        storageBucket: "mytaskwebapp.firebasestorage.app",
-        messagingSenderId: "229046753081",
-        appId: "1:229046753081:web:828bdff56710ff7407fae8",
-        measurementId: "G-T8XTSSYQ9W"
+      const firebaseConfig = { // Your Firebase configuration
+        apiKey: "",
+        authDomain: "",
+        projectId: "",
+        storageBucket: "",
+        messagingSenderId: "",
+        appId: "",
+        measurementId: ""
       };
       const app = initializeApp(firebaseConfig);
       const messaging = getMessaging(app);
@@ -146,7 +146,7 @@
           const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
           // Request permission and get token
           try {
-            const vapidKey = "BNL304vjYC4laGVwE7L-T0inGjNTk43_AAbSt-P54d0yH0nBuxuDV14pXz56M03Vj-ghCPSfUazMBAnH_CKJQbE"; // <-- Paste your VAPID key here
+            const vapidKey = ""; // <-- Paste your VAPID key here
             const currentToken = await getToken(messaging, { vapidKey, serviceWorkerRegistration: registration });
             if (currentToken) {
               // Store token in Firestore
