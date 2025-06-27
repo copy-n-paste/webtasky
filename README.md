@@ -43,7 +43,7 @@ I built this just for fun. Now *you* can also enjoy it — along with all my bug
 1. Clone this repo:
 
    ```bash
-   git clone https://github.com/your-username/mytaskmanager-web.git
+   git clone https://github.com/copy-n-paste/webtasky.git
    ```
 2. Serve it however you want (`live-server`, Firebase CLI, rub two sticks together, etc.).
 3. You'll need to update Firebase config if you're not me.
