@@ -77,7 +77,6 @@ Check out my parallel Python-based CLI version (no frontend tears involved):
 
 This project is licensed under the **DWYWBDBM License**
 (*Do Whatever You Want But Don’t Blame Me*)
-See [`LICENSE`](./LICENSE) for the full nonsense.
 
 ---
 
